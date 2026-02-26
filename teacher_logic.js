@@ -4,6 +4,49 @@ const db = getFirestore();
 
 // ১. টিচার ড্যাশবোর্ড রেন্ডার করা (PW Style)
 export async function loadTeacherDashboard(userData) {
+    // Teacher Dashboard-e Video Upload Form jog kora
+export function renderVideoUploadForm() {
+    const section = document.getElementById('teacherActionArea');
+    section.innerHTML = `
+        <div class="glass p-6 rounded-[2rem] border border-slate-800 animate-fade-in">
+            <h3 class="text-xs font-black text-yellow-500 uppercase mb-6">Upload New Lecture</h3>
+            
+            <div class="space-y-4">
+                <input type="text" id="vidChapter" placeholder="Chapter Name" class="input-premium">
+                <input type="text" id="vidTopic" placeholder="Topic Name" class="input-premium">
+                <input type="text" id="vidUrl" placeholder="YouTube Embed Link (e.g., https://www.youtube.com/embed/XXXX)" class="input-premium">
+                
+                <div class="flex items-center gap-3 p-3 bg-black rounded-xl border border-slate-800">
+                    <input type="checkbox" id="isLiveToggle" class="w-5 h-5 accent-yellow-500">
+                    <label for="isLiveToggle" class="text-xs font-black text-white uppercase italic">Mark as LIVE Class</label>
+                </div>
+
+                <button onclick="window.handleVideoUpload()" class="btn-gold py-4 shadow-xl">Publish Video</button>
+            </div>
+        </div>
+    `;
+}
+
+// Button Click handle korar function
+window.handleVideoUpload = async () => {
+    const chapter = document.getElementById('vidChapter').value;
+    const topic = document.getElementById('vidTopic').value;
+    const url = document.getElementById('vidUrl').value;
+    const isLive = document.getElementById('isLiveToggle').checked;
+    
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if(!chapter || !topic || !url) return alert("All fields are required!");
+
+    // Age banano uploadVideo function-ke call kora
+    await uploadVideo(user.subject, chapter, topic, url, isLive);
+    
+    // Form clear kora
+    document.getElementById('vidChapter').value = "";
+    document.getElementById('vidTopic').value = "";
+    document.getElementById('vidUrl').value = "";
+};
+
     const dashboard = document.getElementById('dashboard');
     dashboard.innerHTML = `
         <div class="space-y-6 animate-fade-in">
