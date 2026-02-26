@@ -43,6 +43,25 @@ export function checkLiveStatus() {
     // Ekhane Firebase theke live class check hobe
     console.log("Checking for Live Classes...");
     // Jodi live thake, dashboard-e ekta top alert dekhabe
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const db = getFirestore();
+
+export function checkLiveStatus() {
+    // Firebase "settings" collection theke live status check hobe
+    onSnapshot(doc(db, "settings", "live_class"), (doc) => {
+        const data = doc.data();
+        const liveIndicator = document.getElementById('liveStatus'); // video_system.js er element
+        
+        if (data && data.isLive) {
+            if(liveIndicator) liveIndicator.classList.remove('hidden');
+            console.log("Teacher is LIVE now!");
+        } else {
+            if(liveIndicator) liveIndicator.classList.add('hidden');
+        }
+    });
+}
+
 }
 
 // ৪. ইউজার সিটি ও ডাটা মনিটরিং
